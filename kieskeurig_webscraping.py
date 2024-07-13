@@ -71,7 +71,8 @@ def main():
   while True:
    # Send mail if the price is lowered, or wait. Check every 8 hours
     if starting_price > product.get_price():
-      mail_alert('Lower price! '+ product_name, product.collect_data(), 'MAILTOADDRESS') # Change MAILTOADDRESS to the emailaddress you want to receive the bot notifications
+      receive_mail_address = input('Receiving mail address: ')
+      mail_alert('Lower price! '+ product_name, product.collect_data(), receive_mail_address) # Change MAILTOADDRESS to the emailaddress you want to receive the bot notifications
       starting_price = product.get_price()
      
       #wait 8 uur
