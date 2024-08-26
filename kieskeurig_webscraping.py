@@ -1,6 +1,3 @@
-''' Use this bot to send mail notifications about the lowest price, scraping from Kieskeurig.nl'''
-
-
 '''import'''
 from bs4 import BeautifulSoup
 import requests
@@ -9,7 +6,7 @@ import smtplib
 import re
 import time
 
-'''Product information'''
+'''Receive notifications about deals on kieskeurig'''
 
 class Product_kieskeurig:
   def __init__ (self, url, productname, store = '', price = 0, link = ''):
@@ -38,9 +35,9 @@ class Product_kieskeurig:
     return link['href'] if link else None
 
   def collect_data(self):
-    return('At {}, the {} priced as low as €{}. Check this link: {}'.format(self.get_store(), self.productname, self.get_price(), self.get_link()))
+    return('Current lowest price for {}: €{} at {}. Check this link: {}'.format(self.productname, self.get_price(), self.get_store(), self.get_link()))
 
-'''Mail setup'''
+'''Mail function'''
 
 def mail_alert(subject, body, to):
   msg = EmailMessage()
@@ -48,8 +45,8 @@ def mail_alert(subject, body, to):
   msg['subject'] = subject
   msg ['to'] = to
 
-  username = 'SENDINGMAILADDRESS' # Insert your 'sending from' gmail address 
-  appkey = 'APPKEY' # Insert it's app password
+  username = #gmail-address that will notify the user
+  appkey = #your gmail appkey
   msg['from'] = username
 
   # Gmail server setup
@@ -62,23 +59,27 @@ def mail_alert(subject, body, to):
 
 def main():
   # Vraag gegevens aan gebruiker
-  starting_price  = int(input('Product starting price: €'))
-  linkje = input('kieskeurig.nl link for this product: ')
+  starting_price = int(input('Lowest price of product: €'))
+  product_link = input('product link (kieskeuring link): ')
   product_name = input('Product name: ')
-
-  product = Product_kieskeurig(linkje, product_name)
-
+  receive_mail_address = input('Mailaddress on which you want to be notified: ')
+  product = Product_kieskeurig(product_link, product_name)
+  interval = int(input('How many minutes between price checks: '))
   while True:
-   # Send mail if the price is lowered, or wait. Check every 8 hours
+   
+   # Notify mail if price is lower, otherwise wait
     if starting_price > product.get_price():
-      receive_mail_address = input('Receiving mail address: ')
-      mail_alert('Lower price! '+ product_name, product.collect_data(), receive_mail_address)
+      mail_alert('Lowest price '+ product_name, product.collect_data(), receive_mail_address)
       starting_price = product.get_price()
-     
-      #wait 8 uur
-      time.sleep(28800)
+
+      print('Mail sended to {}'.format(receive_mail_address))
+      print("I'll check again in about {} minute(s)".format(interval))
+      time.sleep(interval*60)
+    
     else:
-      time.sleep(28800)
+      print('No lower price found.')
+      print("I'll check again in about {} minute(s)".format(interval))
+      time.sleep(interval*60)
 
 if __name__ == '__main__':
   main()
