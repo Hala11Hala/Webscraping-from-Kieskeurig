@@ -46,7 +46,7 @@ def mail_alert(subject, body, to):
   msg ['to'] = to
 
   username = #gmail-address that will notify the user
-  appkey = #your gmail appkey
+  appkey = # gmail appkey
   msg['from'] = username
 
   # Gmail server setup
@@ -64,9 +64,9 @@ def main():
   
   product = Product_kieskeurig(product_link, product_name)
   starting_price = product.get_price()
-  print('----------------------------------------------------------------------------------------')
-  print('Note: This bot will send notifications if the price is below €{}.'.format(starting_price))
-  print('----------------------------------------------------------------------------------------')
+  print('---------------------------------------------------------------------------------------------')
+  print('Note: This bot will only send notifications if the price is below €{}.'.format(starting_price))
+  print('---------------------------------------------------------------------------------------------')
   receive_mail_address = input('Mailaddress on which you want to be notified: ')
   interval = int(input('How many minutes between price checks: '))
   
@@ -77,12 +77,12 @@ def main():
       starting_price = product.get_price()
 
       print('Mail sended to {}'.format(receive_mail_address))
-      print("I'll check again in about {} minute(s)".format(interval))
+      print("I'll check again in about {} minute(s)!".format(interval))
       time.sleep(interval*60)
     
     else:
       print('No lower price found.')
-      print("I'll check again in about {} minute(s)".format(interval))
+      print("I'll check again in about {} minute(s)!".format(interval))
       time.sleep(interval*60)
 
 if __name__ == '__main__':
