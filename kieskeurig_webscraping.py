@@ -58,15 +58,19 @@ def mail_alert(subject, body, to):
   server.quit()
 
 def main():
-  # Vraag gegevens aan gebruiker
-  starting_price = int(input('Lowest price of product: €'))
+   # Ask the user some info
   product_link = input('product link (kieskeuring link): ')
   product_name = input('Product name: ')
-  receive_mail_address = input('Mailaddress on which you want to be notified: ')
+  
   product = Product_kieskeurig(product_link, product_name)
+  starting_price = product.get_price()
+  print('----------------------------------------------------------------------------------------')
+  print('Note: This bot will send notifications if the price is below €{}.'.format(starting_price))
+  print('----------------------------------------------------------------------------------------')
+  receive_mail_address = input('Mailaddress on which you want to be notified: ')
   interval = int(input('How many minutes between price checks: '))
+  
   while True:
-   
    # Notify mail if price is lower, otherwise wait
     if starting_price > product.get_price():
       mail_alert('Lowest price '+ product_name, product.collect_data(), receive_mail_address)
